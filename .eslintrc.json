@@ -1,5 +1,5 @@
 {
-  "env" : {
+  "env": {
     "browser": true,
     "es2021": true
   },
@@ -16,6 +16,9 @@
     },
     "ecmaVersion": 12,
     "sourceType": "module"
+  },
+  "rules": {
+    "@typescript-eslint/no-explicit-any": ["off"]
   },
   "plugins": ["@typescript-eslint"]
 }

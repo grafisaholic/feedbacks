@@ -1,7 +1,7 @@
 import React from 'react';
 import NextLink from 'next/link';
 
-import ButtonDelete from '@components/utils/button-delete';
+import ButtonDelete from '~/components/utils/button-delete';
 
 function SiteTables() {
   return (

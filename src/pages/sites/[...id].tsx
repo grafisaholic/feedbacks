@@ -1,5 +1,5 @@
-import Layout from '@components/layout';
-import Heading from '@components/utils/Heading';
+import Layout from '~/components/layout';
+import Heading from '~/components/utils/Heading';
 import React from 'react';
 
 function FeedbackSites() {

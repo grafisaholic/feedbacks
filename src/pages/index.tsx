@@ -1,10 +1,14 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
 
-import Layout from '@components/layout';
+import Layout from '~/components/layout';
+import ButtonSignIn from '~/components/utils/button-sigin';
 import NextLink from 'next/link';
+import { useAuth } from 'context/Auth';
 
 const Home: NextPage = () => {
+  const { isLogin } = useAuth();
+
   return (
     <Layout>
       <div className="flex-row gap-4">
@@ -26,11 +30,17 @@ const Home: NextPage = () => {
               will display below.
             </p>
             <div className="mt-4 gap-2 flex">
-              <NextLink href="/sites" passHref>
-                <button className="rounded-lg bg-slate-900 px-5 py-2 text-white">
-                  <div className="flex items-center gap-2">View Dashboard</div>
-                </button>
-              </NextLink>
+              {!isLogin ? (
+                <ButtonSignIn />
+              ) : (
+                <NextLink href="/sites" passHref>
+                  <button className="rounded-lg bg-slate-900 px-5 py-2 text-white">
+                    <div className="flex items-center gap-2">
+                      View Dashboard
+                    </div>
+                  </button>
+                </NextLink>
+              )}
             </div>
           </div>
         </div>

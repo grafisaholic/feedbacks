@@ -1,8 +1,31 @@
-import '../../styles/globals.css'
-import type { AppProps } from 'next/app'
+import { useEffect } from 'react';
+import type { AppProps } from 'next/app';
+
+import { AuthProvider } from 'context/Auth';
+import { setSessionToServer, supebase } from '~/libs/supebase';
+
+import '../../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  useEffect(() => {
+    const { data: authListener } = supebase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN') {
+          await setSessionToServer(event, session);
+        }
+      }
+    );
+
+    return () => {
+      authListener?.unsubscribe();
+    };
+  });
+
+  return (
+    <AuthProvider>
+      <Component {...pageProps} />
+    </AuthProvider>
+  );
 }
 
-export default MyApp
+export default MyApp;

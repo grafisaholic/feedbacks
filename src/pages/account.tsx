@@ -2,9 +2,12 @@ import Image from 'next/image';
 import React from 'react';
 import NextLink from 'next/link';
 
-import Layout from '@components/layout';
+import Layout from '~/components/layout';
+import { useAuth } from 'context/Auth';
 
 function Account() {
+  const { user } = useAuth();
+
   return (
     <Layout>
       <div className="w-full lg:w-4/5 px-4 mx-auto pt-14">
@@ -40,9 +43,7 @@ function Account() {
               <h2 className="text-2xl md:text-4xl font-bold">
                 Khabibur Rokhman
               </h2>
-              <span className="text-md text-slate-500">
-                khabiburrokhman13@gmail.com
-              </span>
+              <span className="text-md text-slate-500">{user?.email}</span>
             </div>
             <div className="mt-4 md:px-20 py-4 md:py-8">
               <p className="text-slate-500 font-light">
