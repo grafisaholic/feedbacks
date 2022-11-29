@@ -1,18 +1,56 @@
+import React from 'react';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { formatISO } from 'date-fns';
+import { mutate } from 'swr';
+
 import Layout from '~/components/layout';
 import Heading from '~/components/utils/Heading';
-import React from 'react';
+import { useAuth } from '../../context/Auth';
+import { fetcherWithAuth } from '~/utils/fetcher';
+
+type FeedbackTypes = {
+  id: number;
+  comment: string;
+};
 
 function FeedbackSites() {
+  const router = useRouter();
+  const { user } = useAuth();
+  const { register, handleSubmit } = useForm<FeedbackTypes>();
+
+  const { id } = router.query;
+  const { data: feedbacks } = useSWR(
+    user ? [`/api/sites/feedback/${id}`] : null,
+    fetcherWithAuth
+  );
+
+  const onSubmit: SubmitHandler<FeedbackTypes> = (data) => {
+    const payload = {
+      ...data,
+      id: id,
+      created_at: formatISO(new Date()),
+    };
+
+    mutate(
+      ['/api/sites'],
+      async (sites: any) => ({
+        data: [{ ...payload }, ...sites.data],
+      }),
+      { revalidate: true }
+    );
+  };
+
   return (
     <Layout>
       <Heading title="Sites" />
 
       <div className="py-2 mb-8">
-        <form action="">
+        <form onSubmit={handleSubmit(onSubmit)}>
           <textarea
-            name=""
-            id=""
             autoFocus
+            {...register('comment', { required: true })}
             rows={4}
             className="block mb-4 p-3.5 text-sm text-gray-700 bg-white rounded-lg border border-gray-300 w-2/3 "
             placeholder="Leave a comment..."

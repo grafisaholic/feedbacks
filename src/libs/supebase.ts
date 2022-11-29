@@ -18,5 +18,5 @@ export const setSessionToServer = async (
 };
 
 export const loginWithgoogle = async (): Promise<any> => {
-  return await supebase.auth.signIn({ provider: 'google' });
+  await supebase.auth.signIn({ provider: 'google' });
 };

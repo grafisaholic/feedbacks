@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     return () => {
       authListener?.unsubscribe();
     };
-  });
+  }, []);
 
   return (
     <AuthProvider>

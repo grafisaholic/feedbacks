@@ -10,8 +10,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       res.json({
         success: true,
         isLogin: !!user,
-        email: user.email,
-        is: user.id,
+        user: {
+          email: user.email,
+          name: user.user_metadata.name,
+          picture: user.user_metadata.picture,
+        },
       });
     } else {
       res.statusCode = 401;

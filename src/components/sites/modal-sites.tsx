@@ -1,14 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { mutate } from 'swr';
+import { formatISO } from 'date-fns';
+
+import { Site } from '~/types/global';
+import { insertNewSite } from '~/libs/sites';
+
+type PayloadSite = Omit<Site, 'id'>;
 
 function ModalSite() {
-  const [showModal, setShoModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const { register, handleSubmit, reset, setFocus } = useForm<PayloadSite>();
+  const handleModal = (modal: boolean) => {
+    if (modal) {
+      setShowModal(true);
+      reset();
+    } else {
+      setShowModal(false);
+    }
+  };
+
+  const onSubmit: SubmitHandler<PayloadSite> = (data) => {
+    const payload = {
+      ...data,
+      created_at: formatISO(new Date()),
+    };
+
+    insertNewSite(payload);
+    mutate(
+      ['/api/sites'],
+      async (sites: any) => ({
+        data: [{ ...payload }, ...sites.data],
+      }),
+      { revalidate: true }
+    );
+
+    handleModal(false);
+  };
+
+  useEffect(() => {
+    setFocus('name');
+  }, [setFocus]);
 
   return (
     <>
       <div className="">
         <button
           className="rounded-lg bg-slate-900 px-5 py-2 text-white"
-          onClick={() => setShoModal(true)}
+          onClick={() => handleModal(true)}
         >
           <div className="flex items-center gap-2">Add Site</div>
         </button>
@@ -19,7 +59,7 @@ function ModalSite() {
         aria-hidden="true"
         className={`${
           showModal ? 'block' : 'hidden'
-        } flex justify-center top-32 overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none`}
+        } fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center overflow-x-hidden overflow-y-auto  z-50 outline-none focus:outline-none `}
       >
         <div className="relative p-4 w-full max-w-md h-full md:h-auto">
           {/* Modal content */}
@@ -27,7 +67,7 @@ function ModalSite() {
             <button
               type="button"
               className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center "
-              onClick={() => setShoModal(false)}
+              onClick={() => handleModal(false)}
             >
               <svg
                 aria-hidden="true"
@@ -48,7 +88,7 @@ function ModalSite() {
               <h3 className="mb-8 text-xl font-medium text-gray-900 ">
                 Add Site
               </h3>
-              <form className="space-y-6" action="#">
+              <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                 <div>
                   <label
                     htmlFor="name"
@@ -57,10 +97,9 @@ function ModalSite() {
                     Name
                   </label>
                   <input
-                    autoFocus
                     type="text"
                     placeholder="Google"
-                    name="text"
+                    {...register('name')}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                     required
                   />
@@ -74,9 +113,9 @@ function ModalSite() {
                   </label>
                   <input
                     type="text"
-                    name="link"
                     id="password"
                     placeholder="https://example.com"
+                    {...register('link')}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     required
                   />

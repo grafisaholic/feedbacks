@@ -20,7 +20,7 @@ const PakcagePlan = ({ name, feature, isRecommendate }: Plan) => {
       <div className="flex justify-between flex-col pb-12">
         <div className="justify-between flex items-baseline">
           <h2 className="text-4xl font-bold leading-none">{name}</h2>
-          <p>Free</p>
+          Free
         </div>
         <div className="justify-between flex items-baseline">
           <span

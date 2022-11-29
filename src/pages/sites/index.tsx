@@ -1,10 +1,11 @@
-import Layout from '~/components/layout';
-import SiteTables from '~/components/sites/site-table';
-import Heading from '~/components/utils/Heading';
 import React from 'react';
+
+import Layout from '~/components/layout';
+import Heading from '~/components/utils/Heading';
+import SiteTables from '~/components/sites/site-table';
 import ModalSite from '~/components/sites/modal-sites';
 
-function index() {
+const SitePage = () => {
   return (
     <Layout>
       <div className="flex flex-row justify-between">
@@ -12,9 +13,10 @@ function index() {
 
         <ModalSite />
       </div>
+
       <SiteTables />
     </Layout>
   );
-}
+};
 
-export default index;
+export default SitePage;

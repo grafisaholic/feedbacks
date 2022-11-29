@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 import NextLink from 'next/link';
 
-import { BsFillMoonStarsFill, BsSunFill } from 'react-icons/bs';
+import { BsFillMoonStarsFill } from 'react-icons/bs';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -52,9 +52,7 @@ function Layout({ children }: Props) {
           </div>
         </nav>
       </div>
-      <main className="flex flex-col justify-center px-6 py-12">
-        {children}
-      </main>
+      <main className="flex flex-col justify-center px-6 py-2">{children}</main>
     </div>
   );
 }

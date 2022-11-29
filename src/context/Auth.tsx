@@ -1,12 +1,10 @@
 import useUser from 'hooks/useUser';
+import { User } from '~/types/global';
 import { createContext, useContext } from 'react';
 
 interface IAuthContext {
   isLogin: boolean;
-  user: {
-    id: string;
-    email: string;
-  } | null;
+  user: User | null;
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -26,7 +24,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider
       value={{
-        user: data,
+        user: data?.user,
         isLogin: Boolean(!isLoading && data),
       }}
     >
